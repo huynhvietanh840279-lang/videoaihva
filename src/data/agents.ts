@@ -40,7 +40,7 @@ export const agents: Agent[] = names.map((name, i) => ({
   zalo: `09${63 + i}357${String(100 + i * 7).slice(0, 3)}`,
   verified: i % 3 !== 2,
   joinedAt: new Date(2019 + (i % 5), (i * 3) % 12, 5 + (i % 20)).toISOString(),
-  bio: bios[i % bios.length],
+  bio: bios[i % bios.length]!,
   isAgency: i % 4 === 0,
 }));
 
