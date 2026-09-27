@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BaoGiaRouteImport } from './routes/bao-gia'
 import { Route as TimKiemRouteImport } from './routes/tim-kiem'
+import { Route as DuAnIndexRouteImport } from './routes/du-an.index'
+import { Route as TinSlugRouteImport } from './routes/tin.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,35 +30,53 @@ const TimKiemRoute = TimKiemRouteImport.update({
   path: '/tim-kiem',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DuAnIndexRoute = DuAnIndexRouteImport.update({
+  id: '/du-an/',
+  path: '/du-an/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TinSlugRoute = TinSlugRouteImport.update({
+  id: '/tin/$slug',
+  path: '/tin/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/bao-gia': typeof BaoGiaRoute
   '/tim-kiem': typeof TimKiemRoute
+  '/tin/$slug': typeof TinSlugRoute
+  '/du-an/': typeof DuAnIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bao-gia': typeof BaoGiaRoute
   '/tim-kiem': typeof TimKiemRoute
+  '/tin/$slug': typeof TinSlugRoute
+  '/du-an': typeof DuAnIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/bao-gia': typeof BaoGiaRoute
   '/tim-kiem': typeof TimKiemRoute
+  '/tin/$slug': typeof TinSlugRoute
+  '/du-an/': typeof DuAnIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/bao-gia' | '/tim-kiem'
+  fullPaths: '/' | '/bao-gia' | '/tim-kiem' | '/tin/$slug' | '/du-an/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/bao-gia' | '/tim-kiem'
-  id: '__root__' | '/' | '/bao-gia' | '/tim-kiem'
+  to: '/' | '/bao-gia' | '/tim-kiem' | '/tin/$slug' | '/du-an'
+  id: '__root__' | '/' | '/bao-gia' | '/tim-kiem' | '/tin/$slug' | '/du-an/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BaoGiaRoute: typeof BaoGiaRoute
   TimKiemRoute: typeof TimKiemRoute
+  TinSlugRoute: typeof TinSlugRoute
+  DuAnIndexRoute: typeof DuAnIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -82,6 +102,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TimKiemRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/du-an/': {
+      id: '/du-an/'
+      path: '/du-an'
+      fullPath: '/du-an/'
+      preLoaderRoute: typeof DuAnIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tin/$slug': {
+      id: '/tin/$slug'
+      path: '/tin/$slug'
+      fullPath: '/tin/$slug'
+      preLoaderRoute: typeof TinSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -89,6 +123,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BaoGiaRoute: BaoGiaRoute,
   TimKiemRoute: TimKiemRoute,
+  TinSlugRoute: TinSlugRoute,
+  DuAnIndexRoute: DuAnIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
