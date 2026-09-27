@@ -1,19 +1,19 @@
 export interface ListingSearchParams {
-  transactionType?: "sale" | "rent";
-  keyword?: string;
-  categoryId?: string;
-  provinceId?: string;
-  districtId?: string;
-  wardId?: string;
-  priceRange?: string;
-  areaRange?: string;
-  bedrooms?: number;
-  direction?: string;
-  legal?: string;
-  ownerOnly?: boolean;
-  sort?: "newest" | "price_asc" | "price_desc" | "area_desc" | "ppm2_asc";
-  view?: "grid" | "list";
-  page?: number;
+  transactionType?: "sale" | "rent" | undefined;
+  keyword?: string | undefined;
+  categoryId?: string | undefined;
+  provinceId?: string | undefined;
+  districtId?: string | undefined;
+  wardId?: string | undefined;
+  priceRange?: string | undefined;
+  areaRange?: string | undefined;
+  bedrooms?: number | undefined;
+  direction?: string | undefined;
+  legal?: string | undefined;
+  ownerOnly?: boolean | undefined;
+  sort?: "newest" | "price_asc" | "price_desc" | "area_desc" | "ppm2_asc" | undefined;
+  view?: "grid" | "list" | undefined;
+  page?: number | undefined;
 }
 
 export function validateListingSearch(search: Record<string, unknown>): ListingSearchParams {

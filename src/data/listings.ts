@@ -15,16 +15,16 @@ export interface Listing {
   districtId: string;
   wardId: string;
   street: string;
-  projectId?: string;
+  projectId?: string | undefined;
   price: number | null;
   area: number;
-  frontage?: number;
-  roadWidth?: number;
-  bedrooms?: number;
-  bathrooms?: number;
-  floors?: number;
-  direction?: string;
-  balconyDirection?: string;
+  frontage?: number | undefined;
+  roadWidth?: number | undefined;
+  bedrooms?: number | undefined;
+  bathrooms?: number | undefined;
+  floors?: number | undefined;
+  direction?: string | undefined;
+  balconyDirection?: string | undefined;
   legal: "Sổ đỏ/Sổ hồng" | "Hợp đồng mua bán" | "Đang chờ sổ";
   furniture: "Đầy đủ" | "Cơ bản" | "Không";
   images: string[];
@@ -90,7 +90,7 @@ function imagesFor(categoryId: string, rnd: () => number): string[] {
   const count = 4 + Math.floor(rnd() * 5);
   const out: string[] = [];
   for (let i = 0; i < count; i++) {
-    out.push(`https://images.unsplash.com/${pool[(i + Math.floor(rnd() * pool.length)) % pool.length]}?w=900&q=80`);
+    out.push(`https://images.unsplash.com/${pool[(i + Math.floor(rnd() * pool.length)) % pool.length]!}?w=900&q=80`);
   }
   return out;
 }
@@ -223,16 +223,14 @@ function build(): Listing[] {
   for (let i = 0; i < total; i++) {
     const isRent = i >= 48;
     const transactionType: "sale" | "rent" = isRent ? "rent" : "sale";
-    const categoryId = isRent
-      ? rentCats[i % rentCats.length]
-      : saleCats[i % saleCats.length];
-    const provinceId = provinceWeights[i % provinceWeights.length];
+    const categoryId = (isRent ? rentCats[i % rentCats.length] : saleCats[i % saleCats.length])!;
+    const provinceId = provinceWeights[i % provinceWeights.length]!;
     const province = getProvince(provinceId)!;
     const ds = districtsOf(provinceId);
-    const district = ds[Math.floor(rnd() * ds.length)];
+    const district = ds[Math.floor(rnd() * ds.length)]!;
     const ws = wardsOf(district.id);
-    const ward = ws[Math.floor(rnd() * ws.length)];
-    const street = streets[Math.floor(rnd() * streets.length)];
+    const ward = ws[Math.floor(rnd() * ws.length)]!;
+    const street = streets[Math.floor(rnd() * streets.length)]!;
 
     const isLand = categoryId === "dat" || categoryId === "dat-nen-du-an" || categoryId === "trang-trai";
     const isRoom = categoryId === "thue-phong-tro";
@@ -252,7 +250,7 @@ function build(): Listing[] {
     const postedAt = new Date(Date.now() - Math.floor(rnd() * 30 * 86400000)).toISOString();
     const expiresAt = new Date(new Date(postedAt).getTime() + 30 * 86400000).toISOString();
     const [baseLat, baseLng] = provinceCoords[provinceId] ?? [16.0, 107.0];
-    const title = `${isRent ? "Cho thuê" : "Bán"} ${catLabel[categoryId]} ${area} m²${
+    const title = `${isRent ? "Cho thuê" : "Bán"} ${catLabel[categoryId]!} ${area} m²${
       bedrooms && !isLand ? `, ${bedrooms} phòng ngủ` : ""
     } đường ${street}, ${district.name}`;
     const id = String(i + 1);
@@ -276,12 +274,12 @@ function build(): Listing[] {
       bedrooms,
       bathrooms,
       floors,
-      direction: dirs[Math.floor(rnd() * dirs.length)],
-      balconyDirection: isLand ? undefined : dirs[Math.floor(rnd() * dirs.length)],
+      direction: dirs[Math.floor(rnd() * dirs.length)]!,
+      balconyDirection: isLand ? undefined : dirs[Math.floor(rnd() * dirs.length)]!,
       legal: (["Sổ đỏ/Sổ hồng", "Sổ đỏ/Sổ hồng", "Hợp đồng mua bán", "Đang chờ sổ"] as const)[
         Math.floor(rnd() * 4)
       ],
-      furniture: (["Đầy đủ", "Cơ bản", "Không"] as const)[Math.floor(rnd() * 3)],
+      furniture: (["Đầy đủ", "Cơ bản", "Không"] as const)[Math.floor(rnd() * 3)]!,
       images: imagesFor(categoryId, rnd),
       lat: baseLat + (rnd() - 0.5) * 0.14,
       lng: baseLng + (rnd() - 0.5) * 0.14,
@@ -290,7 +288,7 @@ function build(): Listing[] {
       postedAt,
       expiresAt,
       views: 40 + Math.floor(rnd() * 4000),
-      agentId: agents[i % agents.length].id,
+      agentId: agents[i % agents.length]!.id,
       status: "active",
     });
   }

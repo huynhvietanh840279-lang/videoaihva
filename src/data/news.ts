@@ -75,10 +75,10 @@ export const articles: Article[] = titles.map(([title, categorySlug], i) => ({
     "Các chuyên gia khuyến nghị người mua nên kiểm tra kỹ quy hoạch, pháp lý và năng lực chủ đầu tư trước khi xuống tiền, đồng thời cân đối tỷ lệ vay không vượt quá 50% giá trị tài sản.",
     "Về dài hạn, hạ tầng giao thông và các dự án vành đai tiếp tục là động lực chính giúp mặt bằng giá tại vùng ven duy trì xu hướng đi lên.",
   ].join("\n\n"),
-  cover: `https://images.unsplash.com/${covers[i % covers.length]}?w=1000&q=80`,
+  cover: `https://images.unsplash.com/${covers[i % covers.length]!}?w=1000&q=80`,
   category: newsCategories.find((c) => c.slug === categorySlug)!.name,
   categorySlug,
-  author: authors[i % authors.length],
+  author: authors[i % authors.length]!,
   publishedAt: new Date(Date.now() - (i + 1) * 36 * 3600000).toISOString(),
   views: 500 + i * 317,
 }));

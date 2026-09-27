@@ -31,7 +31,7 @@ export const Route = createFileRoute("/bao-gia")({
   component: PricingPage,
 });
 
-const faqs = [
+const faqs: [string, string][] = [
   ["Tin đăng được duyệt trong bao lâu?", "Tin thường được duyệt trong vòng 15-60 phút làm việc. Tin VIP được ưu tiên duyệt trước."],
   ["Tôi có thể gia hạn tin đã hết hạn không?", "Có. Trong mục Quản lý tin đăng, bạn chọn Gia hạn và chọn số ngày muốn hiển thị thêm."],
   ["Đẩy tin là gì?", "Đẩy tin đưa tin của bạn lên đầu danh sách theo thời gian đăng, giúp tăng lượt xem đáng kể."],

@@ -6,23 +6,23 @@ import { projects } from "@/data/projects";
 const delay = (ms = 400) => new Promise((r) => setTimeout(r, ms));
 
 export interface SearchFilters {
-  transactionType?: "sale" | "rent";
-  keyword?: string;
-  categoryId?: string;
-  provinceId?: string;
-  districtId?: string;
-  wardId?: string;
-  minPrice?: number;
-  maxPrice?: number;
-  minArea?: number;
-  maxArea?: number;
-  bedrooms?: number;
-  direction?: string;
-  legal?: string;
-  ownerOnly?: boolean;
-  sort?: "newest" | "price_asc" | "price_desc" | "area_desc" | "ppm2_asc";
-  page?: number;
-  perPage?: number;
+  transactionType?: "sale" | "rent" | undefined;
+  keyword?: string | undefined;
+  categoryId?: string | undefined;
+  provinceId?: string | undefined;
+  districtId?: string | undefined;
+  wardId?: string | undefined;
+  minPrice?: number | undefined;
+  maxPrice?: number | undefined;
+  minArea?: number | undefined;
+  maxArea?: number | undefined;
+  bedrooms?: number | undefined;
+  direction?: string | undefined;
+  legal?: string | undefined;
+  ownerOnly?: boolean | undefined;
+  sort?: "newest" | "price_asc" | "price_desc" | "area_desc" | "ppm2_asc" | undefined;
+  page?: number | undefined;
+  perPage?: number | undefined;
 }
 
 function normalize(s: string) {
