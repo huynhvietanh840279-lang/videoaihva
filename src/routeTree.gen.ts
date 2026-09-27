@@ -10,33 +10,53 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as BaoGiaRouteImport } from './routes/bao-gia'
+import { Route as TimKiemRouteImport } from './routes/tim-kiem'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const BaoGiaRoute = BaoGiaRouteImport.update({
+  id: '/bao-gia',
+  path: '/bao-gia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TimKiemRoute = TimKiemRouteImport.update({
+  id: '/tim-kiem',
+  path: '/tim-kiem',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/bao-gia': typeof BaoGiaRoute
+  '/tim-kiem': typeof TimKiemRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/bao-gia': typeof BaoGiaRoute
+  '/tim-kiem': typeof TimKiemRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/bao-gia': typeof BaoGiaRoute
+  '/tim-kiem': typeof TimKiemRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/bao-gia' | '/tim-kiem'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/bao-gia' | '/tim-kiem'
+  id: '__root__' | '/' | '/bao-gia' | '/tim-kiem'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  BaoGiaRoute: typeof BaoGiaRoute
+  TimKiemRoute: typeof TimKiemRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +68,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/bao-gia': {
+      id: '/bao-gia'
+      path: '/bao-gia'
+      fullPath: '/bao-gia'
+      preLoaderRoute: typeof BaoGiaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tim-kiem': {
+      id: '/tim-kiem'
+      path: '/tim-kiem'
+      fullPath: '/tim-kiem'
+      preLoaderRoute: typeof TimKiemRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  BaoGiaRoute: BaoGiaRoute,
+  TimKiemRoute: TimKiemRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
