@@ -11,11 +11,16 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BaoGiaRouteImport } from './routes/bao-gia'
+import { Route as DangKyRouteImport } from './routes/dang-ky'
+import { Route as DangNhapRouteImport } from './routes/dang-nhap'
+import { Route as DangTinRouteImport } from './routes/dang-tin'
+import { Route as TaiKhoanRouteImport } from './routes/tai-khoan'
 import { Route as TimKiemRouteImport } from './routes/tim-kiem'
 import { Route as TinTucRouteImport } from './routes/tin-tuc'
 import { Route as BaiVietSlugRouteImport } from './routes/bai-viet.$slug'
 import { Route as DuAnIndexRouteImport } from './routes/du-an.index'
 import { Route as DuAnSlugRouteImport } from './routes/du-an.$slug'
+import { Route as ThanhVienIdRouteImport } from './routes/thanh-vien.$id'
 import { Route as TinSlugRouteImport } from './routes/tin.$slug'
 
 const IndexRoute = IndexRouteImport.update({
@@ -26,6 +31,26 @@ const IndexRoute = IndexRouteImport.update({
 const BaoGiaRoute = BaoGiaRouteImport.update({
   id: '/bao-gia',
   path: '/bao-gia',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DangKyRoute = DangKyRouteImport.update({
+  id: '/dang-ky',
+  path: '/dang-ky',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DangNhapRoute = DangNhapRouteImport.update({
+  id: '/dang-nhap',
+  path: '/dang-nhap',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DangTinRoute = DangTinRouteImport.update({
+  id: '/dang-tin',
+  path: '/dang-tin',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TaiKhoanRoute = TaiKhoanRouteImport.update({
+  id: '/tai-khoan',
+  path: '/tai-khoan',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TimKiemRoute = TimKiemRouteImport.update({
@@ -53,6 +78,11 @@ const DuAnSlugRoute = DuAnSlugRouteImport.update({
   path: '/du-an/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ThanhVienIdRoute = ThanhVienIdRouteImport.update({
+  id: '/thanh-vien/$id',
+  path: '/thanh-vien/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const TinSlugRoute = TinSlugRouteImport.update({
   id: '/tin/$slug',
   path: '/tin/$slug',
@@ -62,20 +92,30 @@ const TinSlugRoute = TinSlugRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/bao-gia': typeof BaoGiaRoute
+  '/dang-ky': typeof DangKyRoute
+  '/dang-nhap': typeof DangNhapRoute
+  '/dang-tin': typeof DangTinRoute
+  '/tai-khoan': typeof TaiKhoanRoute
   '/tim-kiem': typeof TimKiemRoute
   '/tin-tuc': typeof TinTucRoute
   '/bai-viet/$slug': typeof BaiVietSlugRoute
   '/du-an/$slug': typeof DuAnSlugRoute
+  '/thanh-vien/$id': typeof ThanhVienIdRoute
   '/tin/$slug': typeof TinSlugRoute
   '/du-an/': typeof DuAnIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bao-gia': typeof BaoGiaRoute
+  '/dang-ky': typeof DangKyRoute
+  '/dang-nhap': typeof DangNhapRoute
+  '/dang-tin': typeof DangTinRoute
+  '/tai-khoan': typeof TaiKhoanRoute
   '/tim-kiem': typeof TimKiemRoute
   '/tin-tuc': typeof TinTucRoute
   '/bai-viet/$slug': typeof BaiVietSlugRoute
   '/du-an/$slug': typeof DuAnSlugRoute
+  '/thanh-vien/$id': typeof ThanhVienIdRoute
   '/tin/$slug': typeof TinSlugRoute
   '/du-an': typeof DuAnIndexRoute
 }
@@ -83,10 +123,15 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/bao-gia': typeof BaoGiaRoute
+  '/dang-ky': typeof DangKyRoute
+  '/dang-nhap': typeof DangNhapRoute
+  '/dang-tin': typeof DangTinRoute
+  '/tai-khoan': typeof TaiKhoanRoute
   '/tim-kiem': typeof TimKiemRoute
   '/tin-tuc': typeof TinTucRoute
   '/bai-viet/$slug': typeof BaiVietSlugRoute
   '/du-an/$slug': typeof DuAnSlugRoute
+  '/thanh-vien/$id': typeof ThanhVienIdRoute
   '/tin/$slug': typeof TinSlugRoute
   '/du-an/': typeof DuAnIndexRoute
 }
@@ -95,30 +140,45 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/bao-gia'
+    | '/dang-ky'
+    | '/dang-nhap'
+    | '/dang-tin'
+    | '/tai-khoan'
     | '/tim-kiem'
     | '/tin-tuc'
     | '/bai-viet/$slug'
     | '/du-an/$slug'
+    | '/thanh-vien/$id'
     | '/tin/$slug'
     | '/du-an/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/bao-gia'
+    | '/dang-ky'
+    | '/dang-nhap'
+    | '/dang-tin'
+    | '/tai-khoan'
     | '/tim-kiem'
     | '/tin-tuc'
     | '/bai-viet/$slug'
     | '/du-an/$slug'
+    | '/thanh-vien/$id'
     | '/tin/$slug'
     | '/du-an'
   id:
     | '__root__'
     | '/'
     | '/bao-gia'
+    | '/dang-ky'
+    | '/dang-nhap'
+    | '/dang-tin'
+    | '/tai-khoan'
     | '/tim-kiem'
     | '/tin-tuc'
     | '/bai-viet/$slug'
     | '/du-an/$slug'
+    | '/thanh-vien/$id'
     | '/tin/$slug'
     | '/du-an/'
   fileRoutesById: FileRoutesById
@@ -126,10 +186,15 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BaoGiaRoute: typeof BaoGiaRoute
+  DangKyRoute: typeof DangKyRoute
+  DangNhapRoute: typeof DangNhapRoute
+  DangTinRoute: typeof DangTinRoute
+  TaiKhoanRoute: typeof TaiKhoanRoute
   TimKiemRoute: typeof TimKiemRoute
   TinTucRoute: typeof TinTucRoute
   BaiVietSlugRoute: typeof BaiVietSlugRoute
   DuAnSlugRoute: typeof DuAnSlugRoute
+  ThanhVienIdRoute: typeof ThanhVienIdRoute
   TinSlugRoute: typeof TinSlugRoute
   DuAnIndexRoute: typeof DuAnIndexRoute
 }
@@ -148,6 +213,34 @@ declare module '@tanstack/react-router' {
       path: '/bao-gia'
       fullPath: '/bao-gia'
       preLoaderRoute: typeof BaoGiaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dang-ky': {
+      id: '/dang-ky'
+      path: '/dang-ky'
+      fullPath: '/dang-ky'
+      preLoaderRoute: typeof DangKyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dang-nhap': {
+      id: '/dang-nhap'
+      path: '/dang-nhap'
+      fullPath: '/dang-nhap'
+      preLoaderRoute: typeof DangNhapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dang-tin': {
+      id: '/dang-tin'
+      path: '/dang-tin'
+      fullPath: '/dang-tin'
+      preLoaderRoute: typeof DangTinRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/tai-khoan': {
+      id: '/tai-khoan'
+      path: '/tai-khoan'
+      fullPath: '/tai-khoan'
+      preLoaderRoute: typeof TaiKhoanRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tim-kiem': {
@@ -185,6 +278,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DuAnSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/thanh-vien/$id': {
+      id: '/thanh-vien/$id'
+      path: '/thanh-vien/$id'
+      fullPath: '/thanh-vien/$id'
+      preLoaderRoute: typeof ThanhVienIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/tin/$slug': {
       id: '/tin/$slug'
       path: '/tin/$slug'
@@ -198,10 +298,15 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BaoGiaRoute: BaoGiaRoute,
+  DangKyRoute: DangKyRoute,
+  DangNhapRoute: DangNhapRoute,
+  DangTinRoute: DangTinRoute,
+  TaiKhoanRoute: TaiKhoanRoute,
   TimKiemRoute: TimKiemRoute,
   TinTucRoute: TinTucRoute,
   BaiVietSlugRoute: BaiVietSlugRoute,
   DuAnSlugRoute: DuAnSlugRoute,
+  ThanhVienIdRoute: ThanhVienIdRoute,
   TinSlugRoute: TinSlugRoute,
   DuAnIndexRoute: DuAnIndexRoute,
 }
