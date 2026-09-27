@@ -278,7 +278,7 @@ function build(): Listing[] {
       balconyDirection: isLand ? undefined : dirs[Math.floor(rnd() * dirs.length)]!,
       legal: (["Sổ đỏ/Sổ hồng", "Sổ đỏ/Sổ hồng", "Hợp đồng mua bán", "Đang chờ sổ"] as const)[
         Math.floor(rnd() * 4)
-      ],
+      ]!,
       furniture: (["Đầy đủ", "Cơ bản", "Không"] as const)[Math.floor(rnd() * 3)]!,
       images: imagesFor(categoryId, rnd),
       lat: baseLat + (rnd() - 0.5) * 0.14,
