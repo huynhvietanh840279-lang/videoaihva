@@ -12,7 +12,10 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as BaoGiaRouteImport } from './routes/bao-gia'
 import { Route as TimKiemRouteImport } from './routes/tim-kiem'
+import { Route as TinTucRouteImport } from './routes/tin-tuc'
+import { Route as BaiVietSlugRouteImport } from './routes/bai-viet.$slug'
 import { Route as DuAnIndexRouteImport } from './routes/du-an.index'
+import { Route as DuAnSlugRouteImport } from './routes/du-an.$slug'
 import { Route as TinSlugRouteImport } from './routes/tin.$slug'
 
 const IndexRoute = IndexRouteImport.update({
@@ -30,9 +33,24 @@ const TimKiemRoute = TimKiemRouteImport.update({
   path: '/tim-kiem',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TinTucRoute = TinTucRouteImport.update({
+  id: '/tin-tuc',
+  path: '/tin-tuc',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BaiVietSlugRoute = BaiVietSlugRouteImport.update({
+  id: '/bai-viet/$slug',
+  path: '/bai-viet/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DuAnIndexRoute = DuAnIndexRouteImport.update({
   id: '/du-an/',
   path: '/du-an/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DuAnSlugRoute = DuAnSlugRouteImport.update({
+  id: '/du-an/$slug',
+  path: '/du-an/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TinSlugRoute = TinSlugRouteImport.update({
@@ -45,6 +63,9 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/bao-gia': typeof BaoGiaRoute
   '/tim-kiem': typeof TimKiemRoute
+  '/tin-tuc': typeof TinTucRoute
+  '/bai-viet/$slug': typeof BaiVietSlugRoute
+  '/du-an/$slug': typeof DuAnSlugRoute
   '/tin/$slug': typeof TinSlugRoute
   '/du-an/': typeof DuAnIndexRoute
 }
@@ -52,6 +73,9 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/bao-gia': typeof BaoGiaRoute
   '/tim-kiem': typeof TimKiemRoute
+  '/tin-tuc': typeof TinTucRoute
+  '/bai-viet/$slug': typeof BaiVietSlugRoute
+  '/du-an/$slug': typeof DuAnSlugRoute
   '/tin/$slug': typeof TinSlugRoute
   '/du-an': typeof DuAnIndexRoute
 }
@@ -60,21 +84,52 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/bao-gia': typeof BaoGiaRoute
   '/tim-kiem': typeof TimKiemRoute
+  '/tin-tuc': typeof TinTucRoute
+  '/bai-viet/$slug': typeof BaiVietSlugRoute
+  '/du-an/$slug': typeof DuAnSlugRoute
   '/tin/$slug': typeof TinSlugRoute
   '/du-an/': typeof DuAnIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/bao-gia' | '/tim-kiem' | '/tin/$slug' | '/du-an/'
+  fullPaths:
+    | '/'
+    | '/bao-gia'
+    | '/tim-kiem'
+    | '/tin-tuc'
+    | '/bai-viet/$slug'
+    | '/du-an/$slug'
+    | '/tin/$slug'
+    | '/du-an/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/bao-gia' | '/tim-kiem' | '/tin/$slug' | '/du-an'
-  id: '__root__' | '/' | '/bao-gia' | '/tim-kiem' | '/tin/$slug' | '/du-an/'
+  to:
+    | '/'
+    | '/bao-gia'
+    | '/tim-kiem'
+    | '/tin-tuc'
+    | '/bai-viet/$slug'
+    | '/du-an/$slug'
+    | '/tin/$slug'
+    | '/du-an'
+  id:
+    | '__root__'
+    | '/'
+    | '/bao-gia'
+    | '/tim-kiem'
+    | '/tin-tuc'
+    | '/bai-viet/$slug'
+    | '/du-an/$slug'
+    | '/tin/$slug'
+    | '/du-an/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BaoGiaRoute: typeof BaoGiaRoute
   TimKiemRoute: typeof TimKiemRoute
+  TinTucRoute: typeof TinTucRoute
+  BaiVietSlugRoute: typeof BaiVietSlugRoute
+  DuAnSlugRoute: typeof DuAnSlugRoute
   TinSlugRoute: typeof TinSlugRoute
   DuAnIndexRoute: typeof DuAnIndexRoute
 }
@@ -102,11 +157,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TimKiemRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tin-tuc': {
+      id: '/tin-tuc'
+      path: '/tin-tuc'
+      fullPath: '/tin-tuc'
+      preLoaderRoute: typeof TinTucRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bai-viet/$slug': {
+      id: '/bai-viet/$slug'
+      path: '/bai-viet/$slug'
+      fullPath: '/bai-viet/$slug'
+      preLoaderRoute: typeof BaiVietSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/du-an/': {
       id: '/du-an/'
       path: '/du-an'
       fullPath: '/du-an/'
       preLoaderRoute: typeof DuAnIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/du-an/$slug': {
+      id: '/du-an/$slug'
+      path: '/du-an/$slug'
+      fullPath: '/du-an/$slug'
+      preLoaderRoute: typeof DuAnSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tin/$slug': {
@@ -123,6 +199,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BaoGiaRoute: BaoGiaRoute,
   TimKiemRoute: TimKiemRoute,
+  TinTucRoute: TinTucRoute,
+  BaiVietSlugRoute: BaiVietSlugRoute,
+  DuAnSlugRoute: DuAnSlugRoute,
   TinSlugRoute: TinSlugRoute,
   DuAnIndexRoute: DuAnIndexRoute,
 }
