@@ -47,6 +47,18 @@
 }
 
 :root {
+  --space-void: #05070f;
+  --space-panel: #101525;
+  --space-glass: #131b2bc4;
+  --space-line: #8299cf45;
+  --space-text: #f5f7ff;
+  --space-muted: #abb8d5;
+  --space-violet: #ba9aff;
+  --space-cyan: #71e5e6;
+  --space-coral: #ff9da4;
+  --space-button: #d8c9ff;
+  --space-button-text: #19122b;
+  --space-shadow: 0 22px 65px -35px #03050de0, 0 0 36px -24px #a77cf4a8;
   --radius: 0.625rem;
   --background: oklch(0.977 0.001 260);
   --foreground: oklch(0.31 0.021 264);
