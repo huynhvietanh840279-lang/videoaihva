@@ -1489,3 +1489,8 @@ footer { background: var(--space-void); border-top-color: var(--line); }
   .hero::before { background: linear-gradient(90deg, color-mix(in srgb, var(--space-void) 88%, transparent), color-mix(in srgb, var(--space-void) 56%, transparent)), linear-gradient(0deg, var(--space-void), transparent 30%); }
   .hero-space { object-position: 65% center; }
 }
+
+.banner.tg a {
+  color: var(--hi, #a9b6ff);
+  font-weight: 700;
+}

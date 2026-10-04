@@ -30,3 +30,9 @@ Không có API key app vẫn chạy nhưng chỉ có zoom + caption + thumbnail 
 Máy chủ Linux bất kỳ (VPS 4 CPU / 8GB trở lên): cài ffmpeg + `pip install -r requirements.txt` + `playwright install --with-deps chromium`, chạy
 `uvicorn web.app:app --host 0.0.0.0 --port 8000` sau một tên miền có HTTPS.
 Mỗi lần chỉ edit 1 video, các video khác xếp hàng.
+
+## Bot Telegram (chạy cùng web)
+1. Telegram → @BotFather → `/newbot` → đặt tên → nhận token.
+2. Thêm 1 dòng vào file `.env`: `TELEGRAM_BOT_TOKEN=token_của_bạn`
+3. Tắt rồi bật lại máy chủ. Khách nhắn bot, gửi video (≤ 20 MB), chọn màu, nhận video thành phẩm.
+   Video lớn hơn: bot gửi link web. Web tự hiện nút "Gửi qua Telegram" khi bot chạy.

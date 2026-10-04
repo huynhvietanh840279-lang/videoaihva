@@ -1325,6 +1325,11 @@ footer {
   display: none;
 }
 
+
+.banner.tg a {
+  color: var(--hi);
+  font-weight: 700;
+}
 </style>
 
 <header class="top">
@@ -1396,6 +1401,7 @@ footer {
 
     <div class="studio">
       <div class="banner" id="demoBanner" hidden><strong>Chế độ xem thử.</strong><span>Trang này chưa nối với máy chủ edit, nên tiến trình bên dưới chỉ là mô phỏng và không tạo video thật.</span></div>
+      <div class="banner tg" id="tgBanner" hidden><strong>Dùng Telegram?</strong><span>Gửi video cho bot <a id="tgLink" href="#" target="_blank" rel="noopener"></a> và nhận video thành phẩm ngay trong chat (video tối đa 20 MB).</span></div>
       <div class="steps" aria-label="Các bước">
         <div class="step cur" id="st1"><b>1</b>Tải video</div>
         <div class="step" id="st2"><b>2</b>Màu &amp; mã</div>
@@ -1545,6 +1551,7 @@ let file = null, demo = false, requireCode = false;
     if (!r.ok) throw 0;
     const h = await r.json();
     requireCode = !!h.require_code; if (h.max_seconds) CONFIG.maxSeconds = h.max_seconds;
+    if (h.telegram) { $("tgLink").textContent = "@" + h.telegram; $("tgLink").href = "https://t.me/" + h.telegram; $("tgBanner").hidden = false; }
     $("status").className = "status on"; $("statusText").textContent = h.queue ? `Đang xếp hàng: ${h.queue}` : "Máy chủ sẵn sàng";
   } catch { demo = true; $("status").className = "status demo"; $("statusText").textContent = "Chế độ xem thử"; $("demoBanner").hidden = false; }
   $("codeWrap").hidden = !requireCode;

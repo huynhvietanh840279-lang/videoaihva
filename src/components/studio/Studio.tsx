@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { API_URL, PRESETS, STAGES } from "@/config/site";
 
-type Health = { require_code?: boolean; max_seconds?: number; queue?: number };
+type Health = {
+  require_code?: boolean;
+  max_seconds?: number;
+  queue?: number;
+  telegram?: string;
+};
 export type ServerState = "checking" | "online" | "demo";
 
 const fmt = (s: number) => {
@@ -198,6 +203,18 @@ export function Studio({ server }: { server: ReturnType<typeof useServer> }) {
               <span>
                 Web chưa nối với máy chủ edit, nên tiến trình bên dưới chỉ là mô phỏng và không tạo
                 video thật.
+              </span>
+            </div>
+          )}
+          {server.health.telegram && (
+            <div className="banner tg">
+              <strong>Dùng Telegram?</strong>
+              <span>
+                Gửi video cho bot{" "}
+                <a href={`https://t.me/${server.health.telegram}`} target="_blank" rel="noopener">
+                  @{server.health.telegram}
+                </a>{" "}
+                và nhận video thành phẩm ngay trong chat (video tối đa 20 MB).
               </span>
             </div>
           )}

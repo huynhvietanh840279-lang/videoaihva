@@ -5,6 +5,7 @@ Biến môi trường:
   ANTHROPIC_API_KEY  key Claude (bắt buộc để có kịch bản edit thông minh)
   DANG2_REQUIRE_CODE 1 = bắt khách nhập mã truy cập (bán theo lượt)
   DANG2_MAX_SECONDS  thời lượng video tối đa (mặc định 300)
+  TELEGRAM_BOT_TOKEN token bot Telegram (lấy từ @BotFather) — có thì bot tự chạy cùng web
 """
 import json
 import os
@@ -78,6 +79,18 @@ def _refund(code):
         CODES.write_text(json.dumps(c, indent=2))
 
 
+BOT_USERNAME = ""  # bot Telegram điền vào khi chạy
+LISTENERS = []  # hàm(jid, meta, state, pct, msg) — bot Telegram đăng ký vào đây
+
+
+def _notify(jid, meta, state, pct, msg):
+    for fn in LISTENERS:
+        try:
+            fn(jid, meta, state, pct, msg)
+        except Exception:
+            traceback.print_exc()
+
+
 def _worker():
     while True:
         jid = _q.get()
@@ -85,17 +98,58 @@ def _worker():
         meta = json.loads((d / "meta.json").read_text())
         try:
             _set(jid, state="running", pct=1, msg="Bắt đầu")
+            _notify(jid, meta, "running", 1, "Bắt đầu")
+
+            def prog(p, m):
+                _set(jid, pct=p, msg=m)
+                _notify(jid, meta, "running", p, m)
+
             run_job(d / meta["file"], d / "work", d / "ket-qua-dang2.mp4",
-                    colors=(meta["c1"], meta["c2"]),
-                    progress=lambda p, m: _set(jid, pct=p, msg=m))
+                    colors=(meta["c1"], meta["c2"]), progress=prog)
             _set(jid, state="done", pct=100, msg="Xong")
             shutil.rmtree(d / "work", ignore_errors=True)
+            _notify(jid, meta, "done", 100, "Xong")
         except Exception as ex:  # trả lượt cho khách nếu lỗi
             traceback.print_exc()
             _refund(meta.get("code"))
             _set(jid, state="error", msg=str(ex)[-400:])
+            _notify(jid, meta, "error", 0, str(ex)[-300:])
         finally:
             _q.task_done()
+
+
+def enqueue_file(src, c1, c2, code="", extra=None):
+    """Đưa 1 file video (đã có trên đĩa) vào hàng đợi. Trả về (jid, lỗi)."""
+    src = Path(src)
+    ext = src.suffix.lower() or ".mp4"
+    jid = uuid.uuid4().hex[:12]
+    d = JOBS / jid
+    d.mkdir()
+    fname = "input" + ext
+    shutil.move(str(src), d / fname)
+    try:
+        dur = probe(d / fname)["duration"]
+    except Exception:
+        shutil.rmtree(d)
+        return None, "Không đọc được video"
+    if dur > MAX_SECONDS:
+        shutil.rmtree(d)
+        return None, f"Video dài quá {int(MAX_SECONDS)} giây"
+    meta = {"file": fname, "c1": c1, "c2": c2, "code": code}
+    meta.update(extra or {})
+    (d / "meta.json").write_text(json.dumps(meta))
+    _set(jid, state="queued", pct=0, msg=f"Đang xếp hàng (trước bạn: {_q.qsize()})")
+    _q.put(jid)
+    return jid, None
+
+
+def public_url():
+    """Địa chỉ công khai (đường hầm Cloudflare) nếu đang có."""
+    env = os.environ.get("DANG2_PUBLIC_URL", "").rstrip("/")
+    if env:
+        return env
+    f = ROOT / "dia-chi-may-chu.txt"
+    return f.read_text().strip().rstrip("/") if f.exists() else ""
 
 
 def _janitor(days=7):
@@ -115,6 +169,10 @@ def _janitor(days=7):
 threading.Thread(target=_worker, daemon=True).start()
 threading.Thread(target=_janitor, daemon=True).start()
 
+if os.environ.get("TELEGRAM_BOT_TOKEN", "").strip():
+    from web import telegram_bot  # noqa: E402
+    telegram_bot.start(sys.modules[__name__])
+
 
 @app.get("/", response_class=HTMLResponse)
 def index():
@@ -126,7 +184,8 @@ def index():
 
 @app.get("/api/health")
 def health():
-    return {"ok": True, "require_code": REQUIRE_CODE, "max_seconds": MAX_SECONDS, "queue": _q.qsize()}
+    return {"ok": True, "require_code": REQUIRE_CODE, "max_seconds": MAX_SECONDS, "queue": _q.qsize(),
+            "telegram": BOT_USERNAME}
 
 
 @app.post("/api/jobs")
