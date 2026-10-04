@@ -222,7 +222,21 @@ const FX: [string, string, string][] = [
   ],
 ];
 
+const FILTERS = ["Tất cả", "Hình", "Chữ", "Âm thanh"] as const;
+const GROUP: Record<string, (typeof FILTERS)[number]> = {
+  ZOOM: "Hình",
+  HOẠ: "Hình",
+  SFX: "Âm thanh",
+  KEY: "Chữ",
+  "B-ROLL": "Hình",
+  CROP: "Hình",
+  VS: "Chữ",
+  NỀN: "Chữ",
+};
+
 export function Effects() {
+  const [f, setF] = useState<(typeof FILTERS)[number]>("Tất cả");
+  const show = (tag: string) => f === "Tất cả" || GROUP[tag] === f;
   return (
     <section id="hieu-ung">
       <div className="wrap">
@@ -234,15 +248,28 @@ export function Effects() {
             nhất 6 giây và không chiếm quá 40% video, để người xem không bị rối.
           </p>
         </div>
+        <div className="chips" role="group" aria-label="Lọc hiệu ứng">
+          {FILTERS.map((x) => (
+            <button
+              key={x}
+              type="button"
+              className="chip"
+              aria-pressed={f === x}
+              onClick={() => setF(x)}
+            >
+              {x}
+            </button>
+          ))}
+        </div>
         <div className="fx">
           {FX.map(([tag, h, p]) => (
-            <article key={tag}>
+            <article key={tag} hidden={!show(tag)}>
               <span className="tag">{tag}</span>
               <h3>{h}</h3>
               <p>{p}</p>
             </article>
           ))}
-          <article className="wide">
+          <article className="wide" hidden={!show("NỀN")}>
             <span className="tag">NỀN</span>
             <h3>Cắt gọn + thumbnail</h3>
             <p>

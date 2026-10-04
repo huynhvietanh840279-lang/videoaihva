@@ -1,53 +1,25 @@
 /* HVA Video Studio – giao diện chính (tokens sáng/tối ở :root) */
 /* Layout: dải timeline dựng phim làm xương sống — hero là 1 bàn dựng mini, studio là 3 bước, các hiệu ứng là các "track". */
+/* Layout: viên menu nổi + khung lớn viền sáng mờ trên nền chàm có vệt sáng (theo mẫu khách gửi). Một giao diện tối có chủ đích. */
 :root {
-  --bg: #f4f6fa;
-  --surface: #ffffff;
-  --surface-2: #eef1f7;
-  --line: #dce1ec;
-  --fg: #111726;
-  --mute: #5b6478;
-  --amber: #e89a00;
-  --amber-ink: #1a1300;
-  --cyan: #0a9ec2;
-  --ok: #12a150;
-  --bad: #d6453d;
-  --glow: rgba(232, 154, 0, 0.16);
+  --bg: #12145e;
+  --bg-deep: #0b0c3f;
+  --surface: rgba(255, 255, 255, 0.045);
+  --surface-2: rgba(255, 255, 255, 0.08);
+  --line: rgba(176, 186, 255, 0.32);
+  --fg: #f4f5ff;
+  --mute: #b4b9e6;
+  --amber: #ffffff; /* nút chính: viên trắng chữ chàm */
+  --amber-ink: #12145e;
+  --cyan: #9fb0ff;
+  --hi: #a9b6ff;
+  --ok: #4ee59b;
+  --bad: #ff7a8a;
+  --glow: rgba(159, 176, 255, 0.16);
   --f-display: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-body: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   --r: 14px;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0a0e18;
-    --surface: #111726;
-    --surface-2: #172033;
-    --line: #243049;
-    --fg: #eef2fa;
-    --mute: #93a0b8;
-    --amber: #ffb020;
-    --amber-ink: #1a1300;
-    --cyan: #38d3f5;
-    --ok: #3dd68c;
-    --bad: #ff6b61;
-    --glow: rgba(255, 176, 32, 0.14);
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #0a0e18;
-  --surface: #111726;
-  --surface-2: #172033;
-  --line: #243049;
-  --fg: #eef2fa;
-  --mute: #93a0b8;
-  --amber: #ffb020;
-  --amber-ink: #1a1300;
-  --cyan: #38d3f5;
-  --ok: #3dd68c;
-  --bad: #ff6b61;
-  --glow: rgba(255, 176, 32, 0.14);
   color-scheme: dark;
 }
 
@@ -1129,4 +1101,221 @@ footer .wrap {
 }
 .banner strong {
   white-space: nowrap;
+}
+
+/* ===== Phong cách chàm + vệt sáng ===== */
+html {
+  background: var(--bg-deep);
+}
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(42rem 32rem at 95% 0%, rgba(54, 74, 255, 0.55), transparent 70%),
+    radial-gradient(32rem 26rem at 62% 12%, rgba(196, 34, 86, 0.34), transparent 70%),
+    radial-gradient(44rem 34rem at 0% 38%, rgba(40, 58, 230, 0.32), transparent 70%),
+    radial-gradient(36rem 30rem at 100% 62%, rgba(150, 30, 120, 0.26), transparent 70%),
+    radial-gradient(44rem 34rem at 10% 92%, rgba(48, 66, 240, 0.3), transparent 70%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
+}
+.top {
+  top: calc(env(safe-area-inset-top, 0px) + 14px);
+  background: transparent;
+  backdrop-filter: none;
+  border: 0;
+  padding-inline: 16px;
+}
+.top .wrap {
+  height: 62px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: rgba(46, 50, 150, 0.55);
+  backdrop-filter: blur(14px);
+  padding-inline: 18px;
+  margin-top: 14px;
+}
+.logo {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.logo i {
+  background: #fff;
+  color: var(--amber-ink);
+  border-radius: 50%;
+}
+.nav a:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.btn {
+  border-radius: 999px;
+}
+.btn-p {
+  background: #fff;
+  color: var(--amber-ink);
+}
+.btn-g {
+  border-color: rgba(255, 255, 255, 0.7);
+}
+.btn-g:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.status {
+  border-color: var(--line);
+}
+.hero h1 em {
+  color: var(--hi);
+}
+.eyebrow {
+  color: var(--hi);
+}
+.mono,
+.eyebrow {
+  letter-spacing: 0.1em;
+}
+.bay,
+.studio,
+.plan,
+.faq details,
+.fx {
+  background: rgba(255, 255, 255, 0.035);
+  border-color: var(--line);
+  border-radius: 22px;
+  backdrop-filter: blur(6px);
+}
+.bay {
+  box-shadow: 0 40px 90px -50px rgba(0, 0, 0, 0.7);
+}
+.fx {
+  background: var(--line);
+}
+.fx article {
+  background: rgba(20, 22, 100, 0.92);
+}
+.fx article.wide {
+  background: rgba(36, 40, 140, 0.92);
+}
+.fx article.wide h3 {
+  color: var(--hi);
+}
+.fx .tag {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  color: var(--fg);
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+.phone {
+  border-color: rgba(255, 255, 255, 0.25);
+  background: linear-gradient(170deg, #2a3cbf, #151a6e 55%, #0b0c3f);
+}
+.phone .cap span {
+  color: #a9b6ff;
+}
+.c-a {
+  background: #fff;
+}
+.c-c {
+  background: #7d92ff;
+}
+.c-v {
+  background: rgba(255, 255, 255, 0.28);
+}
+.lane .t,
+.drop,
+.bar,
+.stages li.cur {
+  background: rgba(255, 255, 255, 0.06);
+}
+.drop {
+  border-color: var(--line);
+}
+.drop:hover,
+.drop.on {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+.drop svg {
+  color: #fff;
+}
+.step.cur b {
+  border-color: #fff;
+  color: #fff;
+}
+.pre {
+  background: transparent;
+  color: var(--fg);
+  border-color: var(--line);
+  border-radius: 999px;
+}
+.pre[aria-pressed="true"] {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+}
+.inp,
+.custom input,
+.file {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--line);
+}
+.bar i {
+  background: linear-gradient(90deg, #7d92ff, #fff);
+}
+.stages li.cur::before {
+  border-color: #fff;
+  background: #fff;
+}
+.banner {
+  background: rgba(255, 255, 255, 0.07);
+}
+.plan.hot {
+  border-color: #fff;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.08);
+}
+.plan .badge {
+  background: #fff;
+  color: var(--amber-ink);
+  border-radius: 999px;
+}
+.contact code {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--line);
+}
+.faq summary::after {
+  color: var(--hi);
+}
+footer {
+  border-top-color: var(--line);
+}
+
+/* hàng nút lọc kiểu "Category" */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.chip {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg);
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
+  border-radius: 999px;
+  padding: 7px 14px;
+  cursor: pointer;
+}
+.chip:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.chip[aria-pressed="true"] {
+  background: #fff;
+  color: var(--amber-ink);
+  border-color: #fff;
+}
+.fx article[hidden] {
+  display: none;
 }
