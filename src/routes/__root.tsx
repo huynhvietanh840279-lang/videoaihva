@@ -10,9 +10,8 @@ import {
 import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
+import studioCss from "../studio.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
 import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
@@ -20,16 +19,16 @@ function NotFoundComponent() {
     <div className="flex min-h-screen items-center justify-center bg-background px-4">
       <div className="max-w-md text-center">
         <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
+        <h2 className="mt-4 text-xl font-semibold text-foreground">Không tìm thấy trang</h2>
         <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
+          Trang bạn tìm không tồn tại hoặc đã được chuyển.
         </p>
         <div className="mt-6">
           <Link
             to="/"
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
           >
-            Go home
+            Về trang chủ
           </Link>
         </div>
       </div>
@@ -80,11 +79,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "NhàĐất Hub — Mua bán, cho thuê nhà đất toàn quốc" },
+      { title: "HVA Video Studio — AI edit video nói chuyện" },
       {
         name: "description",
         content:
-          "Sàn giao dịch bất động sản NhàĐất Hub: hàng nghìn tin mua bán, cho thuê nhà đất, căn hộ, đất nền trên 63 tỉnh thành.",
+          "Thả video nói chuyện vào, nhận bản edit cao cấp với hiệu ứng, caption và âm thanh do AI dựng.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -94,11 +93,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
         href: appCss,
       },
+      { rel: "stylesheet", href: studioCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap",
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
@@ -128,14 +128,8 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen flex-col">
-        <Header />
-        <main className="flex-1">
-          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-          <Outlet />
-        </main>
-        <Footer />
-      </div>
+      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+      <Outlet />
       <Toaster position="top-center" richColors />
     </QueryClientProvider>
   );

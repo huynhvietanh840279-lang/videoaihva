@@ -1,0 +1,22 @@
+# Triển khai máy chủ edit video lên Render (render.com → New → Blueprint → chọn repo này)
+services:
+  - type: web
+    name: hva-video-api
+    runtime: docker
+    rootDir: backend
+    dockerfilePath: ./Dockerfile
+    plan: standard # cần ≥ 2 CPU / 4GB RAM để dựng video
+    healthCheckPath: /api/health
+    disk:
+      name: storage
+      mountPath: /data
+      sizeGB: 10
+    envVars:
+      - key: ANTHROPIC_API_KEY
+        sync: false # nhập key Claude trên trang Render
+      - key: DANG2_ORIGINS
+        value: https://videoaihva.lovable.app
+      - key: DANG2_REQUIRE_CODE
+        value: "1"
+      - key: DANG2_MAX_SECONDS
+        value: "300"
