@@ -1,0 +1,1646 @@
+<title>HVA Video Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* HVA Video Studio – giao diện chính (tokens sáng/tối ở :root) */
+/* Layout: dải timeline dựng phim làm xương sống — hero là 1 bàn dựng mini, studio là 3 bước, các hiệu ứng là các "track". */
+/* Layout: viên menu nổi + khung lớn viền sáng mờ trên nền chàm có vệt sáng (theo mẫu khách gửi). Một giao diện tối có chủ đích. */
+:root {
+  --bg: #12145e;
+  --bg-deep: #0b0c3f;
+  --surface: rgba(255, 255, 255, 0.045);
+  --surface-2: rgba(255, 255, 255, 0.08);
+  --line: rgba(176, 186, 255, 0.32);
+  --fg: #f4f5ff;
+  --mute: #b4b9e6;
+  --amber: #ffffff; /* nút chính: viên trắng chữ chàm */
+  --amber-ink: #12145e;
+  --cyan: #9fb0ff;
+  --hi: #a9b6ff;
+  --ok: #4ee59b;
+  --bad: #ff7a8a;
+  --glow: rgba(159, 176, 255, 0.16);
+  --f-display: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-body: "Be Vietnam Pro", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --r: 14px;
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--f-body);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding-inline: 20px;
+}
+a {
+  color: inherit;
+}
+h1,
+h2,
+h3 {
+  font-family: var(--f-display);
+  text-wrap: balance;
+  margin: 0;
+  letter-spacing: -0.02em;
+}
+p {
+  margin: 0;
+}
+.mono {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* header */
+.top {
+  position: sticky;
+  top: env(safe-area-inset-top, 0px);
+  z-index: 20;
+  background: color-mix(in srgb, var(--bg) 84%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line);
+}
+.top .wrap {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  height: 64px;
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 18px;
+  text-decoration: none;
+}
+.logo i {
+  width: 30px;
+  height: 30px;
+  border-radius: 9px;
+  background: var(--amber);
+  display: grid;
+  place-items: center;
+  color: var(--amber-ink);
+  font-style: normal;
+  font-size: 15px;
+  font-weight: 900;
+}
+.nav {
+  display: flex;
+  gap: 4px;
+  margin-left: 12px;
+}
+.nav a {
+  text-decoration: none;
+  color: var(--mute);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 8px 12px;
+  border-radius: 9px;
+}
+.nav a:hover {
+  color: var(--fg);
+  background: var(--surface-2);
+}
+.status {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--f-mono);
+  font-size: 12px;
+  color: var(--mute);
+  border: 1px solid var(--line);
+  padding: 6px 10px;
+  border-radius: 30px;
+}
+.status b {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--mute);
+}
+.status.on b {
+  background: var(--ok);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--ok) 20%, transparent);
+}
+.status.demo b {
+  background: var(--amber);
+}
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: 46px;
+  padding: 0 20px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  font: inherit;
+  font-weight: 800;
+  font-size: 15px;
+  cursor: pointer;
+  text-decoration: none;
+  transition:
+    transform 0.12s,
+    background 0.12s;
+}
+.btn:active {
+  transform: translateY(1px);
+}
+.btn-p {
+  background: var(--amber);
+  color: var(--amber-ink);
+}
+.btn-p:hover {
+  filter: brightness(1.06);
+}
+.btn-g {
+  background: transparent;
+  border-color: var(--line);
+  color: var(--fg);
+}
+.btn-g:hover {
+  background: var(--surface-2);
+}
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+@media (max-width: 860px) {
+  .nav {
+    display: none;
+  }
+  .top .btn {
+    display: none;
+  }
+}
+
+/* hero */
+.hero {
+  padding-block: 56px 40px;
+}
+.hero .wrap {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 48px;
+  align-items: center;
+}
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--cyan);
+}
+.eyebrow::before {
+  content: "";
+  width: 18px;
+  height: 2px;
+  background: currentColor;
+}
+.hero h1 {
+  font-size: clamp(36px, 5.4vw, 62px);
+  line-height: 1.04;
+  font-weight: 900;
+  margin-top: 16px;
+}
+.hero h1 em {
+  font-style: normal;
+  color: var(--amber);
+}
+.hero .sub {
+  color: var(--mute);
+  font-size: 18px;
+  margin-top: 18px;
+  max-width: 52ch;
+}
+.cta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 28px;
+}
+.facts {
+  display: flex;
+  gap: 28px;
+  flex-wrap: wrap;
+  margin-top: 34px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+}
+.facts div {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.facts strong {
+  font-family: var(--f-mono);
+  font-size: 20px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.facts span {
+  color: var(--mute);
+  font-size: 13px;
+}
+
+/* editing bay */
+.bay {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 30px 80px -40px rgba(0, 0, 0, 0.45);
+}
+.bay-top {
+  display: flex;
+  gap: 16px;
+}
+.phone {
+  flex: none;
+  width: 190px;
+  aspect-ratio: 9/16;
+  max-width: 100%;
+  border-radius: 18px;
+  overflow: hidden;
+  position: relative;
+  background: linear-gradient(170deg, #2b3550, #151b2b 60%, #0d111c);
+  border: 1px solid var(--line);
+}
+.phone .face {
+  position: absolute;
+  left: 50%;
+  top: 22%;
+  width: 78px;
+  height: 96px;
+  transform: translateX(-50%);
+  border-radius: 44% 44% 40% 40%;
+  background: linear-gradient(#c99a7c, #a8775c);
+  animation: zoom 6s ease-in-out infinite;
+}
+.phone .body {
+  position: absolute;
+  left: 50%;
+  top: 52%;
+  width: 150px;
+  height: 140px;
+  transform: translateX(-50%);
+  border-radius: 70px 70px 0 0;
+  background: #3a4a6b;
+  animation: zoom 6s ease-in-out infinite;
+}
+@keyframes zoom {
+  0%,
+  30%,
+  100% {
+    scale: 1;
+  }
+  40%,
+  60% {
+    scale: 1.08;
+  }
+}
+.phone .cap {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 22%;
+  text-align: center;
+  font-weight: 900;
+  font-size: 17px;
+  color: #fff;
+  text-shadow:
+    0 2px 0 #000,
+    0 0 6px #000;
+}
+.phone .cap span {
+  color: #ffb020;
+}
+.phone .ovr {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 9%;
+  background: rgba(10, 14, 24, 0.88);
+  border-radius: 10px;
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  animation: ovr 6s ease-in-out infinite;
+}
+.phone .ovr div {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 700;
+  color: #fff;
+}
+.phone .ovr div::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 3px;
+  background: #38d3f5;
+}
+@keyframes ovr {
+  0%,
+  62% {
+    opacity: 0;
+    translate: 0 10px;
+  }
+  68%,
+  94% {
+    opacity: 1;
+    translate: 0 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.phone .tc {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.45);
+  padding: 2px 6px;
+  border-radius: 5px;
+}
+.meta {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.meta .row {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+  border-bottom: 1px dashed var(--line);
+  padding-bottom: 8px;
+}
+.meta .row span:first-child {
+  color: var(--mute);
+}
+.meta .row span:last-child {
+  font-family: var(--f-mono);
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+.tl {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+}
+.lane {
+  display: grid;
+  grid-template-columns: 54px 1fr;
+  gap: 8px;
+  align-items: center;
+}
+.lane .k {
+  font-family: var(--f-mono);
+  font-size: 10px;
+  color: var(--mute);
+  letter-spacing: 0.06em;
+}
+.lane .t {
+  position: relative;
+  height: 16px;
+  background: var(--surface-2);
+  border-radius: 5px;
+}
+.clip {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  border-radius: 4px;
+}
+.c-v {
+  background: color-mix(in srgb, var(--fg) 30%, transparent);
+}
+.c-a {
+  background: var(--amber);
+}
+.c-c {
+  background: var(--cyan);
+}
+.playhead {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  left: 62px;
+  width: 2px;
+  background: var(--bad);
+  animation: play 6s linear infinite;
+}
+@keyframes play {
+  from {
+    left: 62px;
+  }
+  to {
+    left: 100%;
+  }
+}
+@media (max-width: 960px) {
+  .hero .wrap {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 460px) {
+  .bay-top {
+    flex-direction: column;
+  }
+  .phone {
+    width: 100%;
+    max-width: 240px;
+    margin: 0 auto;
+  }
+}
+
+/* section heads */
+section {
+  padding-block: 56px;
+}
+.sh {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 28px;
+  max-width: 62ch;
+}
+.sh h2 {
+  font-size: clamp(28px, 3.6vw, 40px);
+  font-weight: 900;
+  line-height: 1.1;
+}
+.sh p {
+  color: var(--mute);
+  font-size: 17px;
+}
+
+/* studio */
+.studio {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  overflow: hidden;
+}
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  border-bottom: 1px solid var(--line);
+}
+.step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 20px;
+  color: var(--mute);
+  font-weight: 700;
+  font-size: 15px;
+  border-right: 1px solid var(--line);
+}
+.step:last-child {
+  border-right: 0;
+}
+.step b {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 2px solid var(--line);
+  font-family: var(--f-mono);
+  font-size: 13px;
+  flex: none;
+}
+.step.cur {
+  color: var(--fg);
+}
+.step.cur b {
+  border-color: var(--amber);
+  color: var(--amber);
+}
+.step.done {
+  color: var(--fg);
+}
+.step.done b {
+  background: var(--ok);
+  border-color: var(--ok);
+  color: #fff;
+}
+@media (max-width: 640px) {
+  .step {
+    padding: 12px;
+    font-size: 13px;
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+  }
+}
+.panel {
+  padding: 28px;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 28px;
+}
+@media (max-width: 860px) {
+  .panel {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+}
+.panel > * {
+  min-width: 0;
+}
+.drop {
+  border: 2px dashed var(--line);
+  border-radius: 18px;
+  min-height: 230px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  padding: 24px;
+  cursor: pointer;
+  transition: 0.15s;
+  background: var(--surface-2);
+}
+.drop:hover,
+.drop.on {
+  border-color: var(--amber);
+  background: var(--glow);
+}
+.drop svg {
+  width: 44px;
+  height: 44px;
+  color: var(--amber);
+}
+.drop strong {
+  font-size: 19px;
+}
+.drop small {
+  color: var(--mute);
+  font-size: 14px;
+}
+.file {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  margin-top: 14px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.file video {
+  width: 54px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 8px;
+  background: #000;
+  flex: none;
+}
+.file .n {
+  font-weight: 700;
+  word-break: break-all;
+}
+.file .d {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  color: var(--mute);
+  margin-top: 4px;
+}
+.file .x {
+  margin-left: auto;
+  flex: none;
+}
+.warn {
+  color: var(--bad);
+  font-size: 14px;
+  font-weight: 600;
+  margin-top: 10px;
+}
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.lbl {
+  font-weight: 700;
+  font-size: 14px;
+  margin-bottom: 10px;
+  display: block;
+}
+.presets {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+.pre {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--fg);
+  border-radius: 11px;
+  padding: 9px 10px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: left;
+}
+.pre i {
+  display: flex;
+  flex: none;
+}
+.pre i span {
+  width: 14px;
+  height: 22px;
+}
+.pre i span:first-child {
+  border-radius: 5px 0 0 5px;
+}
+.pre i span:last-child {
+  border-radius: 0 5px 5px 0;
+}
+.pre[aria-pressed="true"] {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 3px var(--glow);
+}
+.custom {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  align-items: center;
+  color: var(--mute);
+  font-size: 13px;
+}
+.custom input {
+  width: 44px;
+  height: 34px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  padding: 2px;
+  background: var(--surface);
+  cursor: pointer;
+}
+.inp {
+  width: 100%;
+  height: 46px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface);
+  color: var(--fg);
+  padding: 0 14px;
+  font: inherit;
+  font-family: var(--f-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.go {
+  width: 100%;
+  height: 54px;
+  font-size: 17px;
+}
+.hint {
+  color: var(--mute);
+  font-size: 13px;
+}
+
+/* progress */
+.run {
+  padding: 28px;
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 28px;
+}
+@media (max-width: 860px) {
+  .run {
+    grid-template-columns: 1fr;
+    padding: 20px;
+  }
+}
+.run > * {
+  min-width: 0;
+}
+.pct {
+  font-family: var(--f-mono);
+  font-size: 44px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+.bar {
+  height: 10px;
+  border-radius: 6px;
+  background: var(--surface-2);
+  overflow: hidden;
+  margin-top: 14px;
+}
+.bar i {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--amber), var(--cyan));
+  transition: width 0.5s;
+}
+.msg {
+  margin-top: 10px;
+  color: var(--mute);
+}
+.stages {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.stages li {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  font-size: 14px;
+  color: var(--mute);
+}
+.stages li::before {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--line);
+  flex: none;
+}
+.stages li.cur {
+  background: var(--surface-2);
+  color: var(--fg);
+  font-weight: 700;
+}
+.stages li.cur::before {
+  border-color: var(--amber);
+  background: var(--amber);
+  animation: pulse 1s infinite;
+}
+.stages li.done {
+  color: var(--fg);
+}
+.stages li.done::before {
+  border-color: var(--ok);
+  background: var(--ok);
+}
+@keyframes pulse {
+  50% {
+    opacity: 0.35;
+  }
+}
+.result {
+  display: flex;
+  gap: 24px;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+.result video {
+  width: 240px;
+  max-width: 100%;
+  aspect-ratio: 9/16;
+  border-radius: 16px;
+  background: #000;
+  object-fit: cover;
+}
+.result .demo-v {
+  width: 240px;
+  max-width: 100%;
+  aspect-ratio: 9/16;
+  border-radius: 16px;
+  background: linear-gradient(170deg, #2b3550, #0d111c);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-weight: 800;
+  text-align: center;
+  padding: 20px;
+}
+.result h3 {
+  font-size: 26px;
+  font-weight: 900;
+}
+.result .acts {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 18px;
+}
+.err {
+  background: color-mix(in srgb, var(--bad) 12%, transparent);
+  color: var(--bad);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-weight: 600;
+  margin-top: 16px;
+}
+.banner {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 12px 20px;
+  background: var(--glow);
+  border-bottom: 1px solid var(--line);
+  font-size: 14px;
+}
+
+/* effects */
+.fx {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  overflow: hidden;
+}
+.fx article {
+  background: var(--surface);
+  padding: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+.fx .tag {
+  align-self: flex-start;
+  font-family: var(--f-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  padding: 4px 8px;
+  border-radius: 6px;
+  background: var(--surface-2);
+  color: var(--cyan);
+}
+.fx h3 {
+  font-size: 18px;
+  font-weight: 800;
+}
+.fx p {
+  color: var(--mute);
+  font-size: 14.5px;
+}
+.fx article.wide {
+  background: var(--surface-2);
+}
+.fx article.wide h3 {
+  color: var(--amber);
+}
+@media (max-width: 960px) {
+  .fx {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 520px) {
+  .fx {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* pricing */
+.plans {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.plan {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.plan.hot {
+  border-color: var(--amber);
+  box-shadow: 0 0 0 4px var(--glow);
+}
+.plan .pn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 800;
+}
+.plan .badge {
+  font-family: var(--f-mono);
+  font-size: 11px;
+  background: var(--amber);
+  color: var(--amber-ink);
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+.plan .price {
+  font-size: 38px;
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+.plan .price small {
+  font-size: 15px;
+  color: var(--mute);
+  font-weight: 600;
+  letter-spacing: 0;
+}
+.plan ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--mute);
+  font-size: 14.5px;
+}
+.plan li::before {
+  content: "✓";
+  color: var(--ok);
+  font-weight: 900;
+  margin-right: 8px;
+}
+.plan .btn {
+  margin-top: auto;
+}
+@media (max-width: 860px) {
+  .plans {
+    grid-template-columns: 1fr;
+  }
+}
+.contact {
+  margin-top: 18px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  color: var(--mute);
+  font-size: 15px;
+}
+.contact code {
+  font-family: var(--f-mono);
+  color: var(--fg);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 15px;
+}
+
+/* faq */
+.faq {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.faq details {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 16px 18px;
+}
+.faq summary {
+  cursor: pointer;
+  font-weight: 700;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.faq summary::after {
+  content: "+";
+  color: var(--amber);
+  font-weight: 900;
+  font-size: 20px;
+  line-height: 1;
+}
+.faq details[open] summary::after {
+  content: "–";
+}
+.faq p {
+  color: var(--mute);
+  margin-top: 10px;
+  font-size: 15px;
+}
+@media (max-width: 760px) {
+  .faq {
+    grid-template-columns: 1fr;
+  }
+}
+footer {
+  border-top: 1px solid var(--line);
+  padding-block: 28px;
+  color: var(--mute);
+  font-size: 14px;
+}
+footer .wrap {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.status {
+  white-space: nowrap;
+}
+@media (max-width: 480px) {
+  .status span {
+    display: none;
+  }
+  .status {
+    padding: 8px;
+  }
+  .logo {
+    font-size: 16px;
+  }
+}
+.banner {
+  flex-wrap: wrap;
+}
+.banner strong {
+  white-space: nowrap;
+}
+
+/* ===== Phong cách chàm + vệt sáng ===== */
+html {
+  background: var(--bg-deep);
+}
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(42rem 32rem at 95% 0%, rgba(54, 74, 255, 0.55), transparent 70%),
+    radial-gradient(32rem 26rem at 62% 12%, rgba(196, 34, 86, 0.34), transparent 70%),
+    radial-gradient(44rem 34rem at 0% 38%, rgba(40, 58, 230, 0.32), transparent 70%),
+    radial-gradient(36rem 30rem at 100% 62%, rgba(150, 30, 120, 0.26), transparent 70%),
+    radial-gradient(44rem 34rem at 10% 92%, rgba(48, 66, 240, 0.3), transparent 70%),
+    linear-gradient(180deg, var(--bg) 0%, var(--bg-deep) 100%);
+}
+.top {
+  top: calc(env(safe-area-inset-top, 0px) + 14px);
+  background: transparent;
+  backdrop-filter: none;
+  border: 0;
+  padding-inline: 16px;
+}
+.top .wrap {
+  height: 62px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: rgba(46, 50, 150, 0.55);
+  backdrop-filter: blur(14px);
+  padding-inline: 18px;
+  margin-top: 14px;
+}
+.logo {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.logo i {
+  background: #fff;
+  color: var(--amber-ink);
+  border-radius: 50%;
+}
+.nav a:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.btn {
+  border-radius: 999px;
+}
+.btn-p {
+  background: #fff;
+  color: var(--amber-ink);
+}
+.btn-g {
+  border-color: rgba(255, 255, 255, 0.7);
+}
+.btn-g:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.status {
+  border-color: var(--line);
+}
+.hero h1 em {
+  color: var(--hi);
+}
+.eyebrow {
+  color: var(--hi);
+}
+.mono,
+.eyebrow {
+  letter-spacing: 0.1em;
+}
+.bay,
+.studio,
+.plan,
+.faq details,
+.fx {
+  background: rgba(255, 255, 255, 0.035);
+  border-color: var(--line);
+  border-radius: 22px;
+  backdrop-filter: blur(6px);
+}
+.bay {
+  box-shadow: 0 40px 90px -50px rgba(0, 0, 0, 0.7);
+}
+.fx {
+  background: var(--line);
+}
+.fx article {
+  background: rgba(20, 22, 100, 0.92);
+}
+.fx article.wide {
+  background: rgba(36, 40, 140, 0.92);
+}
+.fx article.wide h3 {
+  color: var(--hi);
+}
+.fx .tag {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  color: var(--fg);
+  border-radius: 999px;
+  padding: 4px 10px;
+}
+.phone {
+  border-color: rgba(255, 255, 255, 0.25);
+  background: linear-gradient(170deg, #2a3cbf, #151a6e 55%, #0b0c3f);
+}
+.phone .cap span {
+  color: #a9b6ff;
+}
+.c-a {
+  background: #fff;
+}
+.c-c {
+  background: #7d92ff;
+}
+.c-v {
+  background: rgba(255, 255, 255, 0.28);
+}
+.lane .t,
+.drop,
+.bar,
+.stages li.cur {
+  background: rgba(255, 255, 255, 0.06);
+}
+.drop {
+  border-color: var(--line);
+}
+.drop:hover,
+.drop.on {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+}
+.drop svg {
+  color: #fff;
+}
+.step.cur b {
+  border-color: #fff;
+  color: #fff;
+}
+.pre {
+  background: transparent;
+  color: var(--fg);
+  border-color: var(--line);
+  border-radius: 999px;
+}
+.pre[aria-pressed="true"] {
+  border-color: #fff;
+  background: rgba(255, 255, 255, 0.1);
+  box-shadow: none;
+}
+.inp,
+.custom input,
+.file {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: var(--line);
+}
+.bar i {
+  background: linear-gradient(90deg, #7d92ff, #fff);
+}
+.stages li.cur::before {
+  border-color: #fff;
+  background: #fff;
+}
+.banner {
+  background: rgba(255, 255, 255, 0.07);
+}
+.plan.hot {
+  border-color: #fff;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.08);
+}
+.plan .badge {
+  background: #fff;
+  color: var(--amber-ink);
+  border-radius: 999px;
+}
+.contact code {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: var(--line);
+}
+.faq summary::after {
+  color: var(--hi);
+}
+footer {
+  border-top-color: var(--line);
+}
+
+/* hàng nút lọc kiểu "Category" */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 22px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.chip {
+  font-family: var(--f-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg);
+  background: transparent;
+  border: 1.5px solid rgba(255, 255, 255, 0.8);
+  border-radius: 999px;
+  padding: 7px 14px;
+  cursor: pointer;
+}
+.chip:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.chip[aria-pressed="true"] {
+  background: #fff;
+  color: var(--amber-ink);
+  border-color: #fff;
+}
+.fx article[hidden] {
+  display: none;
+}
+
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="logo" href="#"><i>H</i>HVA Video Studio</a>
+    <nav class="nav" aria-label="Điều hướng">
+      <a href="#studio">Studio</a><a href="#hieu-ung">Hiệu ứng</a><a href="#bang-gia">Bảng giá</a><a href="#hoi-dap">Hỏi đáp</a>
+    </nav>
+    <div class="status" id="status"><b></b><span id="statusText">Đang kiểm tra máy chủ</span></div>
+    <a class="btn btn-p" href="#studio">Edit video</a>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow mono">AI edit video nói chuyện</span>
+      <h1>Thả video vào.<br>Nhận bản edit <em>cao cấp</em> trong vài phút.</h1>
+      <p class="sub">Tự cắt khoảng lặng, zoom theo cảm xúc giọng nói, chèn hoạt hoạ minh hoạ, caption động, từ khoá 2 màu, crop bám mặt và so sánh trước/sau. Không cần biết dựng phim.</p>
+      <div class="cta">
+        <a class="btn btn-p" href="#studio">Edit video đầu tiên</a>
+        <a class="btn btn-g" href="#hieu-ung">Xem 7 hiệu ứng</a>
+      </div>
+      <div class="facts">
+        <div><strong>1080×1920</strong><span>Dọc 9:16, đăng ngay TikTok, Reels</span></div>
+        <div><strong>≤ 5 phút</strong><span>Độ dài video mỗi lần</span></div>
+        <div><strong>Tiếng Việt</strong><span>Nhận giọng có dấu chuẩn</span></div>
+      </div>
+    </div>
+
+    <div class="bay" aria-label="Mô phỏng bàn dựng">
+      <div class="bay-top">
+        <div class="phone">
+          <div class="tc">00:00:12:04</div>
+          <div class="body"></div><div class="face"></div>
+          <div class="cap">3 bước <span>CHỐT ĐƠN</span></div>
+          <div class="ovr"><div>Chào khách</div><div>Hỏi nhu cầu</div><div>Gửi giá & chốt</div></div>
+        </div>
+        <div class="meta">
+          <span class="mono" style="color:var(--mute)">Kịch bản edit · Claude</span>
+          <div class="row"><span>Khoảng lặng đã cắt</span><span>14 đoạn · 9,6s</span></div>
+          <div class="row"><span>Điểm zoom cảm xúc</span><span>6</span></div>
+          <div class="row"><span>Hoạt hoạ minh hoạ</span><span>2</span></div>
+          <div class="row"><span>Từ khoá 2 màu</span><span>9</span></div>
+          <div class="row"><span>Crop bám mặt</span><span>00:41 → 00:46</span></div>
+          <div class="row"><span>So sánh trước/sau</span><span>00:58</span></div>
+        </div>
+      </div>
+      <div class="tl">
+        <div class="playhead"></div>
+        <div class="lane"><span class="k">V1</span><div class="t"><i class="clip c-v" style="left:0;width:24%"></i><i class="clip c-v" style="left:25%;width:31%"></i><i class="clip c-v" style="left:57%;width:43%"></i></div></div>
+        <div class="lane"><span class="k">ZOOM</span><div class="t"><i class="clip c-a" style="left:6%;width:6%"></i><i class="clip c-a" style="left:30%;width:5%"></i><i class="clip c-a" style="left:62%;width:7%"></i><i class="clip c-a" style="left:86%;width:5%"></i></div></div>
+        <div class="lane"><span class="k">HOẠ</span><div class="t"><i class="clip c-c" style="left:16%;width:12%"></i><i class="clip c-c" style="left:44%;width:10%"></i><i class="clip c-c" style="left:74%;width:11%"></i></div></div>
+        <div class="lane"><span class="k">SFX</span><div class="t"><i class="clip c-a" style="left:15%;width:2%"></i><i class="clip c-a" style="left:43%;width:2%"></i><i class="clip c-a" style="left:73%;width:2%"></i><i class="clip c-a" style="left:1%;width:2%"></i></div></div>
+        <div class="lane"><span class="k">CAP</span><div class="t"><i class="clip c-v" style="left:3%;width:12%"></i><i class="clip c-v" style="left:29%;width:14%"></i><i class="clip c-v" style="left:55%;width:18%"></i><i class="clip c-v" style="left:86%;width:13%"></i></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="studio">
+  <div class="wrap">
+    <div class="sh">
+      <span class="eyebrow mono">Studio</span>
+      <h2>3 bước, không cần chỉnh tay</h2>
+      <p>Tải video lên, chọn màu thương hiệu, bấm Edit. Mọi việc còn lại app tự làm.</p>
+    </div>
+
+    <div class="studio">
+      <div class="banner" id="demoBanner" hidden><strong>Chế độ xem thử.</strong><span>Trang này chưa nối với máy chủ edit, nên tiến trình bên dưới chỉ là mô phỏng và không tạo video thật.</span></div>
+      <div class="steps" aria-label="Các bước">
+        <div class="step cur" id="st1"><b>1</b>Tải video</div>
+        <div class="step" id="st2"><b>2</b>Màu &amp; mã</div>
+        <div class="step" id="st3"><b>3</b>Xử lý &amp; tải về</div>
+      </div>
+
+      <div class="panel" id="setup">
+        <div>
+          <div class="drop" id="drop" tabindex="0" role="button" aria-label="Chọn video">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4"/><path d="m7 9 5-5 5 5"/><path d="M20 16v3a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-3"/></svg>
+            <strong>Kéo video vào đây</strong>
+            <small>hoặc bấm để chọn · MP4, MOV · tối đa 5 phút · 1 người nói</small>
+            <input id="file" type="file" accept="video/*" hidden>
+          </div>
+          <div class="file" id="fileBox" hidden>
+            <video id="thumb" muted playsinline></video>
+            <div style="min-width:0"><div class="n" id="fname"></div><div class="d" id="fmeta"></div></div>
+            <button class="btn btn-g x" id="clear" type="button">Đổi video</button>
+          </div>
+          <div class="warn" id="fwarn" hidden></div>
+        </div>
+
+        <div class="side">
+          <div>
+            <span class="lbl">Màu thương hiệu</span>
+            <div class="presets" id="presets"></div>
+            <div class="custom">Tự chọn
+              <input type="color" id="c1" value="#FFB020" aria-label="Màu 1">
+              <input type="color" id="c2" value="#38D3F5" aria-label="Màu 2">
+            </div>
+          </div>
+          <div id="codeWrap" hidden>
+            <label class="lbl" for="code">Mã truy cập</label>
+            <input class="inp" id="code" placeholder="VD: KHACH01" autocomplete="off">
+          </div>
+          <button class="btn btn-p go" id="go" type="button" disabled>Edit video</button>
+          <p class="hint" id="goHint">Chọn video để bắt đầu.</p>
+        </div>
+      </div>
+
+      <div class="run" id="run" hidden>
+        <div>
+          <div id="runLive">
+            <div class="pct" id="pct">0%</div>
+            <div class="bar"><i id="bar"></i></div>
+            <p class="msg" id="msg">Đang tải lên…</p>
+            <p class="hint" style="margin-top:18px">Bạn có thể để tab này mở và làm việc khác. Video 1 phút thường xong trong 3–8 phút.</p>
+          </div>
+          <div class="result" id="result" hidden>
+            <video id="out" controls playsinline hidden></video>
+            <div class="demo-v" id="demoOut" hidden>Video thành phẩm sẽ hiện ở đây</div>
+            <div style="flex:1;min-width:220px">
+              <span class="mono" style="color:var(--ok)">Hoàn tất</span>
+              <h3 style="margin-top:8px">Video đã sẵn sàng</h3>
+              <p class="hint" style="margin-top:8px">MP4 1080×1920, có sẵn caption, hiệu ứng và âm thanh. Đăng thẳng lên TikTok, Reels, Shorts.</p>
+              <div class="acts">
+                <a class="btn btn-p" id="dl" href="#" target="_blank" rel="noopener">Tải video về</a>
+                <button class="btn btn-g" id="again" type="button">Edit video khác</button>
+              </div>
+            </div>
+          </div>
+          <div class="err" id="err" hidden></div>
+        </div>
+        <ol class="stages" id="stages"></ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="hieu-ung">
+  <div class="wrap">
+    <div class="sh">
+      <span class="eyebrow mono">Hiệu ứng</span>
+      <h2>7 lớp hiệu ứng, đặt đúng chỗ</h2>
+      <p>Claude nghe cả video rồi mới quyết định chỗ nào cần hiệu ứng. Hiệu ứng lớn cách nhau ít nhất 6 giây và không chiếm quá 40% video, để người xem không bị rối.</p>
+    </div>
+    <div class="fx">
+      <article><span class="tag">ZOOM</span><h3>Zoom theo cảm xúc</h3><p>Phóng nhẹ 4–8% đúng lúc giọng lên cao hoặc bắt đầu ý mới, vào ra mượt.</p></article>
+      <article><span class="tag">HOẠ</span><h3>Hoạt hoạ minh hoạ</h3><p>Các bước hiện dần, đường nối tự vẽ, đặt dưới cằm nên không bao giờ che mặt.</p></article>
+      <article><span class="tag">SFX</span><h3>Âm thanh hiệu ứng</h3><p>Whoosh, pop, tick khớp đúng khoảnh khắc hình xuất hiện, tinh tế, không lố.</p></article>
+      <article><span class="tag">KEY</span><h3>Từ khoá 2 màu</h3><p>Từ đắt nhất được phóng to theo màu thương hiệu. Caption tự tạm dừng khi có hiệu ứng.</p></article>
+      <article><span class="tag">B-ROLL</span><h3>Lớp phủ số liệu</h3><p>Đoạn nói con số hoặc liệt kê được biến thành màn hình minh hoạ riêng.</p></article>
+      <article><span class="tag">CROP</span><h3>Crop bám mặt</h3><p>Mặt lùi vào khung tròn để nhường chỗ cho nội dung. Cắt rộng, thấy tới ngực.</p></article>
+      <article><span class="tag">VS</span><h3>So sánh trước / sau</h3><p>Khi bạn nói "thay vì A hãy làm B", app dựng thẻ so sánh 2 bên rõ ràng.</p></article>
+      <article class="wide"><span class="tag">NỀN</span><h3>Cắt gọn + thumbnail</h3><p>Bỏ khoảng lặng, tiếng "ừm, à", đoạn đếm 1-2-3 đầu video. Thêm tiêu đề mở đầu gây tò mò.</p></article>
+    </div>
+  </div>
+</section>
+
+<section id="bang-gia">
+  <div class="wrap">
+    <div class="sh">
+      <span class="eyebrow mono">Bảng giá</span>
+      <h2>Trả theo số video</h2>
+      <p>Mua gói, nhận mã truy cập, nhập mã khi edit. Video lỗi được hoàn lượt tự động.</p>
+    </div>
+    <div class="plans" id="plans"></div>
+    <div class="contact">Mua gói qua Zalo <code id="zalo">0981081462</code><button class="btn btn-g" id="copyZalo" type="button" style="height:36px">Sao chép số</button><span id="copied" class="hint" hidden>Đã sao chép</span></div>
+  </div>
+</section>
+
+<section id="hoi-dap">
+  <div class="wrap">
+    <div class="sh"><span class="eyebrow mono">Hỏi đáp</span><h2>Câu hỏi thường gặp</h2></div>
+    <div class="faq">
+      <details open><summary>Video như thế nào thì edit đẹp nhất?</summary><p>Video 1 người nói chuyện trước camera, quay dọc, mặt rõ, âm thanh sạch, dài 30 giây đến 5 phút. Video ngang vẫn nhận, app tự crop theo mặt.</p></details>
+      <details><summary>Mất bao lâu?</summary><p>Thường 3–8 phút cho video 1 phút, tuỳ số người đang xếp hàng. Thanh tiến trình cho biết app đang làm bước nào.</p></details>
+      <details><summary>Có đổi màu chữ theo thương hiệu được không?</summary><p>Có. Chọn 1 bộ màu có sẵn hoặc tự chọn 2 màu. Từ khoá và hoạt hoạ sẽ dùng 2 màu đó.</p></details>
+      <details><summary>Video của tôi có bị lưu lại không?</summary><p>Video chỉ dùng để edit và tự xoá khỏi máy chủ sau 7 ngày. Hãy tải bản thành phẩm về trước thời hạn đó.</p></details>
+      <details><summary>Có dùng nhạc trend không?</summary><p>App chỉ thêm âm thanh hiệu ứng tự tạo, không chèn nhạc có bản quyền. Bạn có thể ghép nhạc trong TikTok khi đăng.</p></details>
+      <details><summary>Edit lỗi thì sao?</summary><p>Nếu app báo lỗi, lượt của bạn được hoàn lại ngay. Bạn có thể thử lại với video khác hoặc nhắn Zalo để được hỗ trợ.</p></details>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer><div class="wrap"><span>© 2026 HVA Video Studio</span><span>Video dọc 9:16 · Tiếng Việt · Edit bằng AI</span></div></footer>
+
+<script>
+/* ===== Cấu hình: sửa giá, màu, địa chỉ máy chủ ở đây ===== */
+const CONFIG = {
+  api: (window.HVA_API ?? ""),          // "" = cùng máy chủ với trang web
+  maxSeconds: 300,
+  presets: [
+    {name:"Hổ phách",   c1:"#FFB020", c2:"#38D3F5"},
+    {name:"Neon",       c1:"#F5FF3B", c2:"#3BF5FF"},
+    {name:"Navy & Vàng",c1:"#FFC93C", c2:"#4D7CFE"},
+    {name:"Đỏ & Trắng", c1:"#FF3B3B", c2:"#FFFFFF"},
+    {name:"Hồng & Tím", c1:"#FF4FA3", c2:"#9B6CFF"},
+    {name:"Xanh lá",    c1:"#2EE59D", c2:"#FFE14D"},
+  ],
+  plans: [  // GIÁ MẪU — đổi theo giá bạn bán
+    {name:"Dùng thử", price:"0đ",   unit:"1 video", items:["Đủ 7 hiệu ứng","Video tối đa 1 phút","Có logo nhỏ cuối video"], cta:"Nhận mã dùng thử"},
+    {name:"Creator",  price:"199K", unit:"10 video", items:["Đủ 7 hiệu ứng","Video tối đa 5 phút","Tự chọn màu thương hiệu","Hoàn lượt nếu lỗi"], cta:"Mua gói Creator", hot:true},
+    {name:"Agency",   price:"499K", unit:"30 video", items:["Mọi thứ trong Creator","Ưu tiên xếp hàng","Hỗ trợ qua Zalo"], cta:"Mua gói Agency"},
+  ],
+};
+const STAGES = [[2,"Chuẩn hoá video 9:16"],[10,"Tách lời nói tiếng Việt"],[35,"Cắt khoảng lặng, từ đệm"],[45,"Nhận diện khuôn mặt"],[55,"Claude lên kịch bản edit"],[62,"Dựng hoạt hoạ"],[82,"Caption & từ khoá 2 màu"],[86,"Ghép hình, hiệu ứng, âm thanh"],[100,"Hoàn tất"]];
+
+const $ = id => document.getElementById(id);
+let file = null, demo = false, requireCode = false;
+
+/* máy chủ */
+(async () => {
+  try {
+    const r = await fetch(CONFIG.api + "/api/health", {cache:"no-store"});
+    if (!r.ok) throw 0;
+    const h = await r.json();
+    requireCode = !!h.require_code; if (h.max_seconds) CONFIG.maxSeconds = h.max_seconds;
+    $("status").className = "status on"; $("statusText").textContent = h.queue ? `Đang xếp hàng: ${h.queue}` : "Máy chủ sẵn sàng";
+  } catch { demo = true; $("status").className = "status demo"; $("statusText").textContent = "Chế độ xem thử"; $("demoBanner").hidden = false; }
+  $("codeWrap").hidden = !requireCode;
+})();
+
+/* màu */
+let sel = 0;
+CONFIG.presets.forEach((p,i) => {
+  const b = document.createElement("button");
+  b.type = "button"; b.className = "pre"; b.setAttribute("aria-pressed", i===0);
+  b.innerHTML = `<i><span style="background:${p.c1}"></span><span style="background:${p.c2}"></span></i>${p.name}`;
+  b.onclick = () => { sel = i; $("c1").value = p.c1; $("c2").value = p.c2; [...$("presets").children].forEach((x,j)=>x.setAttribute("aria-pressed", j===i)); };
+  $("presets").appendChild(b);
+});
+["c1","c2"].forEach(id => $(id).addEventListener("input", () => [...$("presets").children].forEach(x=>x.setAttribute("aria-pressed", false))));
+
+/* gói */
+CONFIG.plans.forEach(p => {
+  const el = document.createElement("div"); el.className = "plan" + (p.hot ? " hot" : "");
+  el.innerHTML = `<div class="pn">${p.name}${p.hot?'<span class="badge">PHỔ BIẾN</span>':''}</div><div class="price">${p.price} <small>/ ${p.unit}</small></div><ul>${p.items.map(x=>`<li>${x}</li>`).join("")}</ul><a class="btn ${p.hot?'btn-p':'btn-g'}" href="#bang-gia" data-zalo>${p.cta}</a>`;
+  $("plans").appendChild(el);
+});
+const copyZalo = () => { const t = $("zalo").textContent; navigator.clipboard?.writeText(t).then(()=>{$("copied").hidden=false;setTimeout(()=>$("copied").hidden=true,1800)}).catch(()=>{const r=document.createRange();r.selectNodeContents($("zalo"));getSelection().removeAllRanges();getSelection().addRange(r)}); };
+$("copyZalo").onclick = copyZalo;
+document.querySelectorAll("[data-zalo]").forEach(a => a.addEventListener("click", e => { e.preventDefault(); $("zalo").scrollIntoView({behavior:"smooth",block:"center"}); copyZalo(); }));
+
+/* chọn file */
+const drop = $("drop");
+drop.onclick = () => $("file").click();
+drop.onkeydown = e => { if (e.key==="Enter"||e.key===" ") { e.preventDefault(); $("file").click(); } };
+$("file").onchange = e => pick(e.target.files[0]);
+["dragenter","dragover"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.add("on"); }));
+["dragleave","drop"].forEach(ev => drop.addEventListener(ev, e => { e.preventDefault(); drop.classList.remove("on"); }));
+drop.addEventListener("drop", e => pick(e.dataTransfer.files[0]));
+$("clear").onclick = () => { file = null; $("file").value = ""; $("fileBox").hidden = true; drop.hidden = false; $("fwarn").hidden = true; setStep(1); $("go").disabled = true; $("goHint").textContent = "Chọn video để bắt đầu."; };
+
+function fmt(s){ s=Math.round(s); return `${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`; }
+function pick(f){
+  if (!f) return;
+  if (!f.type.startsWith("video/")) { $("fwarn").textContent = "File này không phải video. Hãy chọn file MP4 hoặc MOV."; $("fwarn").hidden = false; return; }
+  file = f; drop.hidden = true; $("fileBox").hidden = false; $("fwarn").hidden = true;
+  $("fname").textContent = f.name; $("fmeta").textContent = (f.size/1048576).toFixed(1) + " MB";
+  const v = $("thumb"); v.src = URL.createObjectURL(f);
+  v.onloadedmetadata = () => {
+    $("fmeta").textContent = `${(f.size/1048576).toFixed(1)} MB · ${fmt(v.duration)} · ${v.videoWidth}×${v.videoHeight}`;
+    v.currentTime = Math.min(1, v.duration/2);
+    if (v.duration > CONFIG.maxSeconds) { $("fwarn").textContent = `Video dài ${fmt(v.duration)}, vượt giới hạn ${fmt(CONFIG.maxSeconds)}. Hãy cắt ngắn trước khi tải lên.`; $("fwarn").hidden = false; $("go").disabled = true; return; }
+    if (v.videoWidth > v.videoHeight) { $("fwarn").textContent = "Video ngang: app sẽ tự crop dọc theo khuôn mặt."; $("fwarn").hidden = false; $("fwarn").style.color = "var(--mute)"; }
+  };
+  setStep(2); $("go").disabled = false; $("goHint").textContent = "Sẵn sàng. Bấm Edit video.";
+}
+function setStep(n){ [1,2,3].forEach(i => { $("st"+i).className = "step" + (i<n?" done":i===n?" cur":""); }); }
+
+/* tiến trình */
+function renderStages(pct){
+  $("stages").innerHTML = STAGES.map(([p,name],i) => {
+    const next = STAGES[i+1] ? STAGES[i+1][0] : 101;
+    const cls = pct >= next || pct >= 100 ? "done" : pct >= p ? "cur" : "";
+    return `<li class="${cls}">${name}</li>`;
+  }).join("");
+}
+function show(pct, msg){ $("pct").textContent = Math.round(pct) + "%"; $("bar").style.width = pct + "%"; if (msg) $("msg").textContent = msg; renderStages(pct); }
+function fail(m){ $("err").textContent = m; $("err").hidden = false; $("again").hidden = false; $("result").hidden = true; $("runLive").hidden = false; addRetry(); }
+function addRetry(){ if ($("retry")) return; const b = document.createElement("button"); b.id="retry"; b.className="btn btn-g"; b.style.marginTop="14px"; b.textContent="Quay lại"; b.onclick=reset; $("err").after(b); }
+function reset(){ $("run").hidden = true; $("setup").hidden = false; $("err").hidden = true; $("retry")?.remove(); $("result").hidden = true; $("runLive").hidden = false; setStep(file?2:1); $("go").disabled = !file; }
+$("again").onclick = () => { $("clear").click(); reset(); };
+
+$("go").onclick = () => {
+  if (!file) return;
+  $("setup").hidden = true; $("run").hidden = false; $("err").hidden = true; setStep(3); show(0, "Đang tải lên…");
+  if (demo) return runDemo();
+  const fd = new FormData(); fd.append("video", file); fd.append("c1", $("c1").value); fd.append("c2", $("c2").value); fd.append("code", $("code").value);
+  const x = new XMLHttpRequest(); x.open("POST", CONFIG.api + "/api/jobs");
+  x.upload.onprogress = e => { if (e.lengthComputable) show(e.loaded/e.total*2, `Đang tải lên… ${Math.round(e.loaded/e.total*100)}%`); };
+  x.onload = () => { let r = {}; try { r = JSON.parse(x.responseText); } catch {} ; if (x.status !== 200) return fail(r.detail || "Tải lên không thành công. Kiểm tra kết nối rồi thử lại."); poll(r.id); };
+  x.onerror = () => fail("Mất kết nối tới máy chủ. Kiểm tra mạng rồi thử lại.");
+  x.send(fd);
+};
+function poll(id){
+  fetch(CONFIG.api + "/api/jobs/" + id, {cache:"no-store"}).then(r => r.json()).then(s => {
+    show(Math.max(2, s.pct || 0), s.msg);
+    if (s.state === "done") done(CONFIG.api + "/api/jobs/" + id + "/video");
+    else if (s.state === "error") fail("Edit không thành công: " + (s.msg || "lỗi không rõ") + ". Lượt của bạn đã được hoàn lại.");
+    else setTimeout(() => poll(id), 2000);
+  }).catch(() => setTimeout(() => poll(id), 4000));
+}
+function done(url){
+  setStep(4); $("runLive").hidden = true; $("result").hidden = false;
+  if (url) { $("out").hidden = false; $("demoOut").hidden = true; $("out").src = url; $("dl").href = url + "?download=1"; $("dl").hidden = false; }
+  else { $("out").hidden = true; $("demoOut").hidden = false; $("dl").hidden = true; }
+  renderStages(100);
+}
+function runDemo(){
+  let p = 0, i = 0;
+  const tick = () => { p = Math.min(100, p + 1.4); while (i < STAGES.length-1 && p >= STAGES[i+1][0]) i++; show(p, STAGES[i][1] + "… (mô phỏng)"); if (p < 100) setTimeout(tick, 70); else done(null); };
+  tick();
+}
+renderStages(0);
+</script>
