@@ -1483,6 +1483,7 @@ footer { background: var(--space-void); border-top-color: var(--line); }
   .top .wrap { min-height: 60px; }
   .hero { padding-block: 52px 42px; }
   .hero .wrap { gap: 30px; }
+  .hero .bay { display: none; }
   .hero h1 { font-size: 38px; }
   .hero .sub { font-size: 15px; }
   .hero::before { background: linear-gradient(90deg, color-mix(in srgb, var(--space-void) 88%, transparent), color-mix(in srgb, var(--space-void) 56%, transparent)), linear-gradient(0deg, var(--space-void), transparent 30%); }
