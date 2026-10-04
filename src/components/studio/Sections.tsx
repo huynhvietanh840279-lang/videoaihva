@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { PLANS, ZALO } from "@/config/site";
 import type { ServerState } from "./Studio";
+import cosmicNebula from "@/assets/cosmic-nebula.jpg";
 
 export function TopBar({ state, queue }: { state: ServerState; queue?: number | undefined }) {
   const label =
@@ -98,6 +99,7 @@ const PLAN_ROWS: [string, string][] = [
 export function Hero() {
   return (
     <section className="hero">
+      <img className="hero-space" src={cosmicNebula} alt="" aria-hidden="true" width={1536} height={1024} />
       <div className="wrap">
         <div>
           <span className="eyebrow mono">AI edit video nói chuyện</span>
